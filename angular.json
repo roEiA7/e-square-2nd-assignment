@@ -1,0 +1,155 @@
+{
+  "version": 1,
+  "projects": {
+    "hello-world": {
+      "projectType": "application",
+      "root": "apps/hello-world",
+      "sourceRoot": "apps/hello-world/src",
+      "prefix": "my-workspace",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/hello-world",
+            "index": "apps/hello-world/src/index.html",
+            "main": "apps/hello-world/src/main.ts",
+            "polyfills": "apps/hello-world/src/polyfills.ts",
+            "tsConfig": "apps/hello-world/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "apps/hello-world/src/favicon.ico",
+              "apps/hello-world/src/assets"
+            ],
+            "styles": ["apps/hello-world/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "apps/hello-world/src/environments/environment.ts",
+                  "with": "apps/hello-world/src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "hello-world:build:production"
+            },
+            "development": {
+              "browserTarget": "hello-world:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "hello-world:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/hello-world/src/**/*.ts",
+              "apps/hello-world/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/hello-world"],
+          "options": {
+            "jestConfig": "apps/hello-world/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "hello-world-e2e": {
+      "root": "apps/hello-world-e2e",
+      "sourceRoot": "apps/hello-world-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/hello-world-e2e/cypress.json",
+            "tsConfig": "apps/hello-world-e2e/tsconfig.e2e.json",
+            "devServerTarget": "hello-world:serve:development"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "hello-world:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/hello-world-e2e/**/*.{js,ts}"]
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/angular"
+  },
+  "schematics": {
+    "@nrwl/angular": {
+      "application": {
+        "linter": "eslint"
+      },
+      "library": {
+        "linter": "eslint"
+      },
+      "storybook-configuration": {
+        "linter": "eslint"
+      }
+    },
+    "@nrwl/angular:application": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "jest"
+    },
+    "@nrwl/angular:component": {
+      "style": "scss"
+    }
+  },
+  "defaultProject": "hello-world"
+}
